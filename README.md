@@ -7,6 +7,7 @@
 - [LeetCode] 225. Implement Stack using Queues
 
 ## 0316 [SQL] SELECT
+- Velog 링크: https://velog.io/@allice1010/SQL-%EC%A0%95%EB%A6%AC-SELECT2
 - [프로그래머스] 과일로 만든 아이스크림 고르기(Lv.1)
 - [프로그래머스] 조건에 부합하는 중고거래 댓글 조회하기(Lv.1)
 - [프로그래머스] 12세 이하인 여자 환자 목록 출력하기 (Lv.1)
@@ -17,4 +18,3 @@
 - [프로그래머스] 조건에 맞는 회원수 구하기 (Lv.1)
 - [프로그래머스] 인기있는 아이스크림 (Lv.1)
 - [프로그래머스] 조건에 맞는 도서 리스트 출력하기 (Lv.1)
-- Velog 링크: https://velog.io/@allice1010/SQL-%EC%A0%95%EB%A6%AC-SELECT2 
