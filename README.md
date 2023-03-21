@@ -18,3 +18,10 @@
 - [프로그래머스] 조건에 맞는 회원수 구하기 (Lv.1)
 - [프로그래머스] 인기있는 아이스크림 (Lv.1)
 - [프로그래머스] 조건에 맞는 도서 리스트 출력하기 (Lv.1)
+
+## 0320 Hash
+- [프로그래머스] 폰켓몬(Lv.1)
+- [LeetCode] 3. Longest Substring without Repeating Characters(Medium)
+- [LeetCode] 347. Top K Frequent Elements(Medium)
+- [LeetCode] 771. Jewels and Stones(Easy)
+
