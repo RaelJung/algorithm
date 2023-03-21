@@ -3,8 +3,8 @@
 ## 0315 Stack & Queue
 - [프로그래머스] 올바른 괄호(Lv.2)
 - [LeetCode] 20. Valid Parentheses(Easy)
-- [LeetCode] 739. Daily Temperatures
-- [LeetCode] 225. Implement Stack using Queues
+- [LeetCode] 225. Implement Stack using Queues(Easy)
+- [LeetCode] 739. Daily Temperatures(Medium)
 
 ## 0316 [SQL] SELECT
 - Velog 링크: https://velog.io/@allice1010/SQL-%EC%A0%95%EB%A6%AC-SELECT2
@@ -24,4 +24,10 @@
 - [LeetCode] 3. Longest Substring without Repeating Characters(Medium)
 - [LeetCode] 347. Top K Frequent Elements(Medium)
 - [LeetCode] 771. Jewels and Stones(Easy)
+
+## 0321 DFS
+- [LeetCode] 94. Binary Tree Inorder Traversal(Easy)
+- [LeetCode] 144. Binary Tree Preorder Traversal(Easy)
+- [LeetCode] 145. Binary Tree Postorder Traversal(Easy)
+
 
