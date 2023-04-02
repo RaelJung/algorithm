@@ -1,3 +1,5 @@
+#118. Pascals Triangle(Easy)
+
 class Solution:
     def generate(self, numRows: int) -> List[List[int]]:
         pascal = [[1]*(i+1) for i in range(numRows)]
