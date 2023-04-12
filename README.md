@@ -58,4 +58,20 @@
 - [LeetCode] 543. Diameter of Binary Tree(Easy)
 - [LeetCode] 617. Merge Two Binary Trees(Easy)
 
+## 0405 Sort
+- [LeetCode] 169. Majority Element(Easy)
+- [LeetCode] 217. Contains Duplicate(Easy)
+- [LeetCode] 268. Missing Number(Easy)
+- [LeetCode] 349. Intersection of Two Arrays(Easy)
 
+## 0407 Array
+- [LeetCode] 26. Remove Duplicates from Sorted Array(Easy)
+- [LeetCode] 27. Remove Element(Easy)
+- [LeetCode] 35. Search Insert Position(Easy)
+- [LeetCode] 78. Subsets(Medium)
+- [LeetCode] 90. Subsets II(Medium)
+
+## 0409 String
+- [LeetCode] 14. Longest Common Prefix(Easy)
+- [LeetCode] 136. Single Number(Easy)
+- [LeetCode] 557. Reverse Words in a String III(Easy)
