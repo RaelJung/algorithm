@@ -85,5 +85,5 @@
 ## 0414 String
 - [LeetCode] 748. Shortest Completing Word(Easy)
 - [LeetCode] 804. Unique Morse Code Words(Easy)
-- [LeetCode]
 - [LeetCode] 821. Shortest Distance to a Character(Easy)
+- [LeetCode] 944. Delete Columns to Make Sorted(Easy)
