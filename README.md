@@ -75,3 +75,15 @@
 - [LeetCode] 14. Longest Common Prefix(Easy)
 - [LeetCode] 136. Single Number(Easy)
 - [LeetCode] 557. Reverse Words in a String III(Easy)
+
+## 0412 String
+- [LeetCode] 412. Fizz Buzz(Easy)
+- [LeetCode] 415. Add String(Easy)
+- [LeetCode] 451. Sort Characters By Frequency(Medium)
+- [LeetCode] 657. Robot Return to Origin(Easy)
+
+## 0414 String
+- [LeetCode] 748. Shortest Completing Word(Easy)
+- [LeetCode] 804. Unique Morse Code Words(Easy)
+- [LeetCode]
+- [LeetCode] 821. Shortest Distance to a Character(Easy)
