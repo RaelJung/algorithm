@@ -87,3 +87,9 @@
 - [LeetCode] 804. Unique Morse Code Words(Easy)
 - [LeetCode] 821. Shortest Distance to a Character(Easy)
 - [LeetCode] 944. Delete Columns to Make Sorted(Easy)
+
+## 0416 Sort
+- [LeetCode] 1464. Maximum Product of Two Elements in an Array(Easy)
+- [LeetCode] 1491. Average Salary Excluding the Minimum and Maximum Salary(Easy)
+- [LeetCode] 1636. Sort Array by Increasing Frequency(Easy)
+- [LeetCode] 1859. Sorting the Sentence(Easy)
