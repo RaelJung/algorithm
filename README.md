@@ -93,3 +93,9 @@
 - [LeetCode] 1491. Average Salary Excluding the Minimum and Maximum Salary(Easy)
 - [LeetCode] 1636. Sort Array by Increasing Frequency(Easy)
 - [LeetCode] 1859. Sorting the Sentence(Easy)
+
+## 0419 Sort
+- [LeetCode] 905. Sort Array By Parity(Easy)
+- [LeetCode] 922. Sort Array By Parity II(Easy)
+- [LeetCode] 977. Squares of a Sorted Array(Easy)
+- [LeetCode] 1403. Minimum Subsequence in Non-Increasing Order(Easy)
