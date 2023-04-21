@@ -99,3 +99,9 @@
 - [LeetCode] 922. Sort Array By Parity II(Easy)
 - [LeetCode] 977. Squares of a Sorted Array(Easy)
 - [LeetCode] 1403. Minimum Subsequence in Non-Increasing Order(Easy)
+
+## 0421 Sort
+- [LeetCode] 1365. How Many Numbers Are Smaller Than the Current Number(Easy)
+- [LeetCode] 1460. Make Two Arrays Equal by Reversing Subarrays(Easy)
+- [LeetCode] 2160. Minimum Sum of Four Digit Number After Splitting Digits(Easy)
+- [LeetCode] 2418. Sort the people(Easy)
