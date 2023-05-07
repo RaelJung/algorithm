@@ -105,3 +105,21 @@
 - [LeetCode] 1460. Make Two Arrays Equal by Reversing Subarrays(Easy)
 - [LeetCode] 2160. Minimum Sum of Four Digit Number After Splitting Digits(Easy)
 - [LeetCode] 2418. Sort the people(Easy)
+
+## 0427 SQL
+- [LeetCode] 175. Combine Two Tables(Easy)
+- [LeetCode] 178. Rank Scores(Medium)
+- [LeetCode] 182. Duplicate Emails(Easy)
+- [LeetCode] 584. Find Customer Referee(Easy)
+
+## 0507 SSAFY
+- [SWEA] 1926. 간단한 369게임(D2)
+- [SWEA] 1989. 초심자의 회문검사(D2)
+- [SWEA] 2001. 파리퇴치(D2)
+- [SWEA] 2007. 패턴 마디의 길이(D2)
+- [SWEA] 2046. 스탬프 찍기(D1)
+- [SWEA] 2047. 신문 헤드라인(D1)
+- [SWEA] 2050. 알파벳을 숫자로 변환(D1)
+- [SWEA] 2058. 자릿수 더하기(D1)
+- [SWEA] 2063. 중간값 찾기(D1)
+- [SWEA] 2068. 최대수 구하기(D1)
