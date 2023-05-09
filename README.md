@@ -125,5 +125,9 @@
 - [SWEA] 2068. 최대수 구하기(D1)
 
 ## 0508 BaekJoon
-- [BaekJoon] 25238. 가희와 방어율 무시
-- [BaekJoon] 25317. 코딩은 체육과목입니다
+- [BaekJoon] 25238. 가희와 방어율 무시(Bronze)
+- [BaekJoon] 25314. 코딩은 체육과목입니다(Bronze)
+
+## 0509 BaekJoon
+- [BaekJoon] 2525. 오븐 시계(Bronze)
+- [BaekJoon] 11021. A+B-7(Bronze)
