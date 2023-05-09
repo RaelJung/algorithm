@@ -18,3 +18,6 @@ for test_case in range(1, T + 1):
 
     answer = num_pattern + 1
     print("#%d" %test_case, answer)
+
+#만약 패턴이 swswsy라면? --> 오류 발생.
+#패턴의 끝과 끝 찾는 방식으로 다시 풀이하기
