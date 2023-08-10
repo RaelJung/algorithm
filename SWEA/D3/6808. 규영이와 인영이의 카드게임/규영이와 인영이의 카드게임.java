@@ -8,7 +8,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-//NP
+//SWAP
 public class Solution {
     static int T, win, lose, n = 9;
     static int[] input = new int[19];
@@ -39,18 +39,36 @@ public class Solution {
             }
             
             //풀이
-            //정렬 - 이미 정렬 inCard가 이미 정렬
-            while(true){
-                //complete code
-                check();
-                
-                if(!np(inCard)) break;
-            }
+            perm(0);
 
             sb.append("#").append(t).append(" ").append(win).append(" ").append(lose).append("\n");
         }
         System.out.println(sb);
 
+    }
+    
+    //재귀호출 구조
+    //tgtIdx 자리에 수를 채우는 작업
+    static void perm(int srcIdx){
+        //기저 조건
+        if(srcIdx == n){
+            check();
+            return;
+        }
+
+        //i가 srcIdx부터 <= 자기 자신을 포함.
+        for(int i=srcIdx; i<inCard.length; i++){
+            int temp = inCard[srcIdx];
+            inCard[srcIdx] = inCard[i];
+            inCard[i] = temp;
+
+            perm(srcIdx + 1);
+
+            //i와 srcIdx 교환 원복
+            temp = inCard[srcIdx];
+            inCard[srcIdx] = inCard[i];
+            inCard[i] = temp;
+        }
     }
 
     static void check() {
@@ -68,40 +86,5 @@ public class Solution {
         } else {
             lose++;
         }
-    }
-
-    static boolean np(int array[]){
-        //3가지
-        //1. 앞에서 교환되어야 하는 인덱스 & 작업
-        int i = array.length - 1;
-        while(i>0 && array[i-1] >= array[i]) --i;
-
-        //이미 가장 큰 수
-        //desc
-        if(i==0) return false;
-
-        //앞쪽에서 바꿀 index 확정 i-1
-
-        //2. 뒤에서 교환되어야 하는 인덱스 & 작업
-        int j = array.length - 1;
-        while(array[i-1] >= array[j]) --j;
-
-        //j 확정
-        swap(array, i-1, j);
-
-        //3. 교환 후, 뒤쪽을 작은 수로 정리
-        int k = array.length - 1;
-        while(i<k){
-            swap(array, i++, k--);
-        }
-
-        //np() 호출 전 보다 바로 다음 큰 수를 만든 것
-        return true;
-    }
-
-    static void swap(int[] array, int i, int j){
-        int temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
     }
 }
