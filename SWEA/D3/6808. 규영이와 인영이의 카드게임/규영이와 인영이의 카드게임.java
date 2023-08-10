@@ -8,13 +8,12 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-// 18개 카드 중에 규영이의 카드 9개 고정되고 나머지 9개 카드의 순서에 따라 승부가 갈라짐
+//NP
 public class Solution {
     static int T, win, lose, n = 9;
     static int[] input = new int[19];
     static int[] guCard = new int[9];
     static int[] inCard = new int[9]; // 인영이의 카드
-    static int[] tgt = new int[9]; // 순열을 통해 배치될 카드
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
@@ -38,35 +37,30 @@ public class Solution {
                     inCard[num++] = i;
                 }
             }
-            perm(0, 0);
+            
+            //풀이
+            //정렬 - 이미 정렬 inCard가 이미 정렬
+            while(true){
+                //complete code
+                check();
+                
+                if(!np(inCard)) break;
+            }
+
             sb.append("#").append(t).append(" ").append(win).append(" ").append(lose).append("\n");
         }
         System.out.println(sb);
 
     }
 
-    static void perm(int tgtIdx, int mask) {
-        if (tgtIdx == n) {
-            check();
-            return;
-        }
-        for (int i = 0; i < n; i++) {
-            if ((mask & 1 << i) != 0) {
-                continue;
-            }
-            tgt[tgtIdx] = inCard[i];
-            perm(tgtIdx + 1, mask | 1 << i);
-        }
-    }
-
     static void check() {
         int guSum = 0;
         int inSum = 0;
         for (int i = 0; i < n; i++) {
-            if (guCard[i] > tgt[i]) {
-                guSum += guCard[i] + tgt[i];
+            if (guCard[i] > inCard[i]) {
+                guSum += guCard[i] + inCard[i];
             } else {
-                inSum += guCard[i] + tgt[i];
+                inSum += guCard[i] + inCard[i];
             }
         }
         if (guSum > inSum) {
@@ -74,5 +68,40 @@ public class Solution {
         } else {
             lose++;
         }
+    }
+
+    static boolean np(int array[]){
+        //3가지
+        //1. 앞에서 교환되어야 하는 인덱스 & 작업
+        int i = array.length - 1;
+        while(i>0 && array[i-1] >= array[i]) --i;
+
+        //이미 가장 큰 수
+        //desc
+        if(i==0) return false;
+
+        //앞쪽에서 바꿀 index 확정 i-1
+
+        //2. 뒤에서 교환되어야 하는 인덱스 & 작업
+        int j = array.length - 1;
+        while(array[i-1] >= array[j]) --j;
+
+        //j 확정
+        swap(array, i-1, j);
+
+        //3. 교환 후, 뒤쪽을 작은 수로 정리
+        int k = array.length - 1;
+        while(i<k){
+            swap(array, i++, k--);
+        }
+
+        //np() 호출 전 보다 바로 다음 큰 수를 만든 것
+        return true;
+    }
+
+    static void swap(int[] array, int i, int j){
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
