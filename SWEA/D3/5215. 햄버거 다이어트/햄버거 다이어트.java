@@ -4,10 +4,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-//bitmask 사용!
+//DFS + param!
+//Item => 2차원 배열
 public class Solution {
     static int T, N, L, max;
-    static Item[] src;
+    static int[][] src;
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception{
@@ -21,49 +22,36 @@ public class Solution {
             N = Integer.parseInt(st.nextToken());
             L = Integer.parseInt(st.nextToken());
             
-            src = new Item[N];
+            src = new int[N][2];    //0: point, 1: cal
             for(int i=0; i<N; i++){
                 st = new StringTokenizer(br.readLine());
-                src[i] = new Item(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+                src[i][0] = Integer.parseInt(st.nextToken());
+                src[i][1] = Integer.parseInt(st.nextToken());
                 
             }
 
             //부분집합
-            subset(0, 0);   //두번째 인자가 mask
+            dfs(0, 0, 0);   //dfs + param
             sb.append("#").append(t).append(" ").append(max).append("\n");
         }
         System.out.println(sb);
     }
 
-    private static void subset(int idx, int mask) {
+    private static void dfs(int idx, int point, int cal) {
         //기저조건
         if(idx == N){
             //complete code
-            int cal = 0;
-            int point = 0;
-
-            //i번째 재료의 선택 여부 확인 (mask에 기록)
-            //선택된 재료에 대한 cal, point 계산 수행
-            for(int i=0; i<N; i++){
-                if((mask & 1 << i)==0) continue;
-                cal += src[i].c;
-                point += src[i].p;
-            }
-
-            //합에 대한 칼로리 체크, max 처리
-            if(cal <= L)  max = Math.max(max, point);
-            
+            //L 조건을 따지지 않는다. <- 이전에 가지치기로 이 조건을 따질 것이므로.
+            max = Math.max(max, point); 
             return;
         }
-        subset(idx+1, mask | 1 << idx); //선택
-        subset(idx+1, mask);    //비선택
-	}
-
-    static class Item{
-        int p, c;
-        Item(int p, int c){
-            this.p = p;
-            this.c = c;
+        dfs(idx+1, point, cal);     //비선택 <= 전달받은 point, cal을 그대로 다음 재귀호출에 전달
+        //가지치기
+        //다음 재귀호출의 cal이 이미 L을 초과하면 가지 않는다.
+        int nextCal = cal + src[idx][1];
+        if(nextCal <= L){
+            dfs(idx+1, point+src[idx][0], nextCal);           //선택
         }
-    }
+        
+	}
 }
