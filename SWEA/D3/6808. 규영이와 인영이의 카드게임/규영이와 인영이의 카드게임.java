@@ -15,7 +15,6 @@ public class Solution {
     static int[] guCard = new int[9];
     static int[] inCard = new int[9]; // 인영이의 카드
     static int[] tgt = new int[9]; // 순열을 통해 배치될 카드
-    static boolean[] select = new boolean[9];
     static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Exception {
@@ -39,26 +38,24 @@ public class Solution {
                     inCard[num++] = i;
                 }
             }
-            perm(0);
+            perm(0, 0);
             sb.append("#").append(t).append(" ").append(win).append(" ").append(lose).append("\n");
         }
         System.out.println(sb);
 
     }
 
-    static void perm(int tgtIdx) {
+    static void perm(int tgtIdx, int mask) {
         if (tgtIdx == n) {
             check();
             return;
         }
         for (int i = 0; i < n; i++) {
-            if (select[i]) {
+            if ((mask & 1 << i) != 0) {
                 continue;
             }
             tgt[tgtIdx] = inCard[i];
-            select[i] = true;
-            perm(tgtIdx + 1);
-            select[i] = false;
+            perm(tgtIdx + 1, mask | 1 << i);
         }
     }
 
