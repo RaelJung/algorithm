@@ -5,16 +5,17 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 //0811 BOJ_15686_치킨배달
+//NP 풀이
 public class Main {
+	static int[] index;
 	static int N, M, min, houseSize, srcSize;
-	static List<int[]> house, src, tgt;
+	static List<int[]> house, src;
 	static int[] dp;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		house = new ArrayList<>();
 		src = new ArrayList<>();
-		tgt = new ArrayList<>();
 		
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken());
@@ -35,40 +36,57 @@ public class Main {
 		houseSize = house.size();
 		srcSize = src.size();
 
-		//조합
-		comb(0,0);
-		System.out.println(min);
-	}
-	
-	static void comb(int srcIdx, int tgtIdx) {
-		//기저 조건
-		if(tgtIdx == M) {
+		//NP
+		//srcSize -> M: 0000111...111(1의 수가 M개) -> ... -> 111...11000
+		index = new int[srcSize];	
+		for(int i=srcSize-M; i<srcSize; i++) {
+			index[i] = 1;
+		}
+		
+		//조합 by NP
+		while(true) {
 			//complete code
-			//치킨집 M개를 조합으로 뽑은 상태
-			//치킨 거리 계산
-			//모든 집 각각에 대해서 뽑힌 M개의 치킨집 거리 중 최소의 것을 찾아야함
 			int sum=0;		//현재 조합의 치킨 거리의 총합
 			for(int i=0; i<houseSize; i++) {
 				int dist = Integer.MAX_VALUE;
 				int[] h = house.get(i);
 				
-				for(int j=0; j<M; j++) {
-					int[] c = tgt.get(j);
-					dist = Math.min(dist, Math.abs(h[0]-c[0])+Math.abs(h[1]-c[1]));
-					
+				for(int j=0; j<srcSize; j++) {	//모든 치킨집에 대해서
+					if(index[j] == 1) {		//j번째 치킨집이 선택되었으면
+						int[] c = src.get(j);
+						dist = Math.min(dist, Math.abs(h[0]-c[0])+Math.abs(h[1]-c[1]));
+					}
 				}
 				sum+=dist;
 			}
 			min=Math.min(min, sum);
-			return;
+			
+			if (!np(index)) break;	//더이상 더 큰 수를 만들 수 없을 때 break;
 		}
-		if(srcIdx == srcSize) return;
-		
-		tgt.add(src.get(srcIdx));		//선택
-		comb(srcIdx+1, tgtIdx+1);		//선택 O
-		tgt.remove(src.get(srcIdx));	//선택 원복
-		comb(srcIdx+1, tgtIdx);			//선택 X <= 배열은 자연스럽게 다음 인덱스를 덮어쓰는 구조 (원복 필요)
+		System.out.println(min);
 	}
 	
+	static boolean np(int[] arr) {
+        int i, j, k;
+        i = j = k = srcSize - 1;
+
+        while(i > 0 && arr[i-1] >= arr[i]) i--;
+        if(i == 0) return false;
+        
+        while(arr[i-1] >= arr[j] ) j--;
+        
+        swap(arr, i-1, j);
+        
+        while(k > i) {
+            swap(arr, i++, k--);
+        }
+        return true;
+    }
+    
+    static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
 	
 }
