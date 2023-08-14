@@ -2,7 +2,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-//Bottom-Up 방식
+//Top-Down 방식
 public class Main {
     static int n;
     static char[][] map;
@@ -18,27 +18,37 @@ public class Main {
                 map[i]= br.readLine().toCharArray();
         }
         // 풀이
-        System.out.println(divide(0, 0, n));
-        
+        divide(0, 0, n);
+        System.out.println(sb.toString());
     }
 
-    static String divide(int y, int x, int n) {
-    	if(n==1) return String.valueOf(map[y][x]);
-
-        //() + 4분할 결과
-        int half = n/2;
-        String ret1 = divide(y, x, half);
-        String ret2 = divide(y, x+half, half);
-        String ret3 = divide(y+half, x, half);
-        String ret4 = divide(y+half, x+half, half);
-        
-        if(ret1.length() == 1 && ret1.equals(ret2) && ret1.equals(ret3) && ret1.equals(ret4)) {
-        	return ret1;
+    // 시작점 y, x에서 너비 높이 n영역이 모두 같은 문자인지 확인 
+    static boolean check(int y, int x, int n) {
+        char ch = map[y][x];
+        for(int i = y; i<y+n; i++) {
+            for(int j =x; j<x+n;j++) {
+                if(ch != map[i][j]) {
+                    return false;
+                }
+            }
         }
-        else {
-        	StringBuilder sb = new StringBuilder();
-        	sb.append("("+ret1+ret2+ret3+ret4+")");
-        	return sb.toString();
+        // 이 영역의 모든 문자가 같다.
+        sb.append(ch);
+        return true;
+    }
+
+    static void divide(int y, int x, int n) {
+        // check() true/false 구분
+        if(!check(y, x, n)) {
+            //() + 4분할 결과
+            // 너비를 반으로 줄인다.
+            int half = n/2;
+            sb.append("(");
+            divide(y, x, half);
+            divide(y, x+half, half);
+            divide(y+half, x, half);
+            divide(y+half, x+half, half);
+            sb.append(")");
         }
     }
 
