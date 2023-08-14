@@ -2,46 +2,45 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
+//Bottom-Up 방식
 public class Main {
-	static int spaces[][];
-	
+    static int n;
+    static char[][] map;
+    static StringBuilder sb= new StringBuilder();
     public static void main(String[] args) throws Exception{
-    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        int N = Integer.parseInt(br.readLine());
-        spaces = new int[N][N];
+        BufferedReader br =new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        for (int r = 0; r < N; r++) {
-        	String str = br.readLine();
-            for (int c = 0; c < N; c++) {
-                spaces[r][c] = str.charAt(c)-'0';
-            }
+        n = Integer.parseInt(st.nextToken());
+        map = new char[n][n];
+
+        for(int i= 0; i<n; i++) {
+                map[i]= br.readLine().toCharArray();
         }
-        makeSpace(0,0, N);
+        // 풀이
+        System.out.println(divide(0, 0, n));
+        
     }
 
-    private static void makeSpace(int sr, int sc, int size) { // 영역의 좌상단 r, c, 영역 크기 size
-        int sum = 0;
-        for (int r = sr; r < sr + size; r++) {
-            for (int c = sc; c < sc + size; c++) {
-                sum += spaces[r][c];
-            }
+    static String divide(int y, int x, int n) {
+    	if(n==1) return String.valueOf(map[y][x]);
+
+        //() + 4분할 결과
+        int half = n/2;
+        String ret1 = divide(y, x, half);
+        String ret2 = divide(y, x+half, half);
+        String ret3 = divide(y+half, x, half);
+        String ret4 = divide(y+half, x+half, half);
+        
+        if(ret1.length() == 1 && ret1.equals(ret2) && ret1.equals(ret3) && ret1.equals(ret4)) {
+        	return ret1;
         }
-
-        if (sum == 0) { // 모두 하얀색인 공간(기저 조건): size가 1이면 재귀호출 안됨
-          System.out.print(0);
-
-        } else if (sum == size * size) { // 모두 검은색인 공간(기저조건) : size가 1이면 재귀호출 안됨
-        	System.out.print(1);
-
-        } else {// 두 색이 섞여있는 공간
-            int half = size / 2;
-            System.out.print("(");
-            makeSpace(sr, sc, half); // 1
-            makeSpace(sr, sc + half, half); // 2
-            makeSpace(sr + half, sc, half); // 3
-            makeSpace(sr + half, sc+ half, half); // 4
-            System.out.print(")");
+        else {
+        	StringBuilder sb = new StringBuilder();
+        	sb.append("("+ret1+ret2+ret3+ret4+")");
+        	return sb.toString();
         }
-
     }
+
+
 }
