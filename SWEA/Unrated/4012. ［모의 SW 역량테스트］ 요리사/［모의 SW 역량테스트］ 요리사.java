@@ -3,11 +3,11 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+//BitMask
 public class Solution {
 	static int N, halfN, T, min;
 	static int[][] map;
-	static boolean[] select;		//재료 선택 / 비선택
-	static int arrA[], arrB[];		//
+	static int arrA[], arrB[];		
 	static StringBuilder sb = new StringBuilder();
 	
 	public static void main(String[] args) throws Exception{
@@ -18,7 +18,6 @@ public class Solution {
 			N = Integer.parseInt(br.readLine());
 			halfN = N/2;
 			map = new int[N][N];
-			select = new boolean[N];
 			arrA = new int[halfN];
 			arrB = new int[halfN];
 			
@@ -32,7 +31,7 @@ public class Solution {
 			
 			//풀이
 			min = Integer.MAX_VALUE;
-			comb(0, 0);
+			comb(0, 0, 0);
 			
 			sb.append("#"+t+" "+min+"\n");
 		}
@@ -40,27 +39,25 @@ public class Solution {
 		System.out.println(sb);
 	}
 	
-	static void comb(int srcIdx, int tgtIdx) {
+	static void comb(int srcIdx, int tgtIdx, int mask) {
 		//기저조건
 		if(tgtIdx == halfN) {
 			//complete code
-			check();
+			check(mask);
 			
 			return;
 		}
 		
 		if(srcIdx == N) return;
 		
-		select[srcIdx] = true;
-		comb(srcIdx + 1 , tgtIdx + 1);		//현재 src를 tgt에 선택
-		select[srcIdx] = false;
-		comb(srcIdx+1, tgtIdx);
+		comb(srcIdx + 1 , tgtIdx + 1, mask | 1 << srcIdx);		//현재 src를 tgt에 선택
+		comb(srcIdx+1, tgtIdx, mask);
 		
 	}
 	
 	//select 배열에서 선택, 비선택 => 2그룹 나누어서 생각
 	//각각의 그룹별  sum 계산 후, 차이 계산 후, min 계산
-	static void check() {
+	static void check(int mask) {
 		int sumA = 0;	//선택
 		int sumB = 0;	//비선택
 		
@@ -69,7 +66,7 @@ public class Solution {
 		
 		//select[] -> arrA, arrB
 		for(int i=0; i<N; i++) {
-			if(select[i]) arrA[idxA++] = i;
+			if((mask & 1 << i) != 0) arrA[idxA++] = i;
 			else arrB[idxB++] = i;
 		}
 		
