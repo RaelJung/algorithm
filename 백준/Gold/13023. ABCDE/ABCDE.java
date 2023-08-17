@@ -59,15 +59,29 @@ public class Main {
             return;
         }
         
-        for(int i : graph.get(num)) {
-        	if(!visited[i]) {
-        		visited[i] = true;
-        		dfs(i, cnt+1);
-        		visited[i] = false;
-        	}
+        List<Integer> numFriends = graph.get(num);
+        int size = numFriends.size(); 		//num에서 갈 수 있는 다른 친구의 수
+        for(int i=0; i<size; i++) {
+        	int n = numFriends.get(i);
+        	
+        	if(visited[n]) continue;		//이미 방문
+        	visited[n] = true;
+        	dfs(n, cnt+1);
+        	visited[n] = false;
         }
         
+        //이 문제에서는 for-each 문이 효율적임
+//        for(int i : graph.get(num)) {
+//        	if(!visited[i]) {
+//        		visited[i] = true;
+//        		dfs(i, cnt+1);
+//        		visited[i] = false;
+//        	}
+//        }
+        
         // 계속 이어지는 친구를 방문 -> lambda
+        // functional implements이므로 동적 할당이 이루어짐.
+        // lambda는 호출할 때마다 동적으로 할당. 따라서 메모리가 4배 차이남!!
 //        graph.get(num).forEach((i)->{
 //            if(!visited[i]) {
 //                visited[i] = true;
