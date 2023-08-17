@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-//인접 행렬 쓰니깐 시간초과...
+//더더더최적화@.@
 public class Main {
 	static int N, M;
     static int from, to;
 
-    static List<List<Integer>> graph = new ArrayList<>();
+    static List<Integer>[] graph;//ArrayList의 배열
 
     static boolean[] visited;
 
@@ -22,18 +22,20 @@ public class Main {
         StringTokenizer st = new StringTokenizer(br.readLine());
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
+        
         visited = new boolean[N];
+        graph = new ArrayList[N];
         
         for (int i = 0; i < N; i++) {
-            graph.add(new ArrayList<>());
+            graph[i] = new ArrayList<>();
         }
         
         for (int i = 0; i < M; i++) {
             st = new StringTokenizer(br.readLine());
             from = Integer.parseInt(st.nextToken());
             to = Integer.parseInt(st.nextToken());
-            graph.get(from).add(to);
-            graph.get(to).add(from);
+            graph[from].add(to);
+            graph[to].add(from);
         }
 
         // 풀이
@@ -59,7 +61,9 @@ public class Main {
             return;
         }
         
-        List<Integer> numFriends = graph.get(num);
+        
+        //ArrayList를 선언해서 바로 접근하기 때문에 for-each문보다 빠르다.
+        List<Integer> numFriends = graph[num];
         int size = numFriends.size(); 		//num에서 갈 수 있는 다른 친구의 수
         for(int i=0; i<size; i++) {
         	int n = numFriends.get(i);
@@ -69,26 +73,6 @@ public class Main {
         	dfs(n, cnt+1);
         	visited[n] = false;
         }
-        
-        //이 문제에서는 for-each 문이 효율적임
-//        for(int i : graph.get(num)) {
-//        	if(!visited[i]) {
-//        		visited[i] = true;
-//        		dfs(i, cnt+1);
-//        		visited[i] = false;
-//        	}
-//        }
-        
-        // 계속 이어지는 친구를 방문 -> lambda
-        // functional implements이므로 동적 할당이 이루어짐.
-        // lambda는 호출할 때마다 동적으로 할당. 따라서 메모리가 4배 차이남!!
-//        graph.get(num).forEach((i)->{
-//            if(!visited[i]) {
-//                visited[i] = true;
-//                dfs(i, cnt+1);
-//                visited[i] = false;
-//            }
-//        });
     }
 
 }
