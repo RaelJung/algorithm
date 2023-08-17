@@ -59,23 +59,22 @@ public class Main {
             return;
         }
         
-        // 계속 이어지는 친구를 방문
-        graph.get(num).forEach((i)->{
-            if(!visited[i]) {
-                visited[i] = true;
-                dfs(i, cnt+1);
-                visited[i] = false;
-            }
-        });
-//        for(int i = 0; i<N; i++) {
-//            if(!friends[num][i] || visited[i]) continue; // num으로 부터 갈 수 없는 친구, 이미 방문한 친구
-//             visited[i] = true;
-//             dfs(i, cnt+1);
-//             visited[i] = false; // 내가 방문해온 자리만 visit check
-//        }
+        for(int i : graph.get(num)) {
+        	if(!visited[i]) {
+        		visited[i] = true;
+        		dfs(i, cnt+1);
+        		visited[i] = false;
+        	}
+        }
         
-        
-
+        // 계속 이어지는 친구를 방문 -> lambda
+//        graph.get(num).forEach((i)->{
+//            if(!visited[i]) {
+//                visited[i] = true;
+//                dfs(i, cnt+1);
+//                visited[i] = false;
+//            }
+//        });
     }
 
 }
