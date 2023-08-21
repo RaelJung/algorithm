@@ -29,7 +29,7 @@ public class Main {
 		int plus = 0;
 		int multiply = 0;
 		
-		visit[N] = 0;		//true의 의미
+		visit[N] = 1;		//depth 1+visited
 		q.offer(N);
 		
 		while(!q.isEmpty()) {
@@ -64,7 +64,7 @@ public class Main {
 			}
 		}
 		//boolean의 방문 여부도 체크하지만, depth도 확인만 해줄 수 있음
-		return visit[K];
+		return visit[K]-1;		//-1은 처음의 1 보정용
 	}
 	
 }
