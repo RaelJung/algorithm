@@ -47,6 +47,17 @@ public class Main {
 		
 	}
 	
+	//sel->true: A, false: B
+	static void dfs(int v, boolean sel) {
+		visit[v] = true; 	//해당 정점 방문
+		for(int i=1; i<=N; i++) {
+			int adj = matrix[v][i];
+			if(adj != 0 && !visit[adj] && select[adj] == sel) {
+				dfs(adj, sel);
+			}
+		}
+	}
+	
 	static void check() {
 		//두 그룹이 각각 유효한지 따진다. (연결)
 		//그룹별로 따지되, 양쪽 다 연결 여부를 확인
@@ -57,53 +68,36 @@ public class Main {
 		q.clear();
 		
 		// A - select: true
+		int a = -1;		//A 그룹의 dfs 시작 정점
 		for(int i=1; i<=N; i++) {
 			//선택된 한 정점만 queue에 넣고 bfs
 			if(select[i]) {
-				visit[i] = true;		//방문 체크
-				q.offer(i);
+				//선택한 정점에서 dfs
+				a = i;
 				break;
 			}
 		}
 			
 		//선택된 애 없으면
-		if(q.size() == 0) return;
+		if(a == -1) return;
 		
-		while(!q.isEmpty()) {
-			int v = q.poll();
-			
-			//모든 정점에 대해서 A 그룹이면서 연결되었는지 확인
-			for(int i=1; i<=N; i++) {
-				int adj = matrix[v][i];
-				if(adj != 0 && !visit[adj] && select[adj]) {
-					visit[adj] = true;
-					q.offer(adj);
-				}
-			}
-		}
+		dfs(a, true);
 		
 		// B - select: false
+		int b = -1;
 		for(int i=1; i<=N; i++) {
 			//선택된 한 정점만 queue에 넣고 bfs
 			if(! select[i]) {
-				visit[i] = true;		//방문 체크
-				q.offer(i);
+				b = i;
 				break;
 			}
 		}
 		
-		while(!q.isEmpty()) {
-			int v = q.poll();
-			
-			//모든 정점에 대해서 A 그룹이면서 연결되었는지 확인
-			for(int i=1; i<=N; i++) {
-				int adj = matrix[v][i];
-				if(adj != 0 && !visit[adj] && !select[adj]) {
-					visit[adj] = true;
-					q.offer(adj);
-				}
-			}
-		}
+		//선택된 애 없으면
+		if(b == -1) return;
+		
+		dfs(b, false);
+		
 		// A, B 모두 연결되어 있는지 visit[] 확인
 		for(int i=1; i<=N; i++) {
 			if(!visit[i]) return;		//연결되어 있지 X 것이 하나라도 있으면
