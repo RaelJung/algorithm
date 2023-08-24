@@ -1,6 +1,8 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 public class Solution {
@@ -8,10 +10,10 @@ public class Solution {
     static int T, N;
     static long ans;
     
-    static int[] parent; // 서로소
     static int[][] island; // 0: x, 1: y
-    
-    static long[][] edges; // 0: v1, 1: v2: 2: distance
+    static List<List<Edge>> vertex;
+    static PriorityQueue<Edge> pqueue = new PriorityQueue<>( (e1, e2) -> Long.compare(e1.c, e2.c));
+    static boolean[] visit;
     static double E;
     
     static StringBuilder sb = new StringBuilder();
@@ -40,45 +42,44 @@ public class Solution {
             E = Double.parseDouble(br.readLine());
             
             // 나머지 자료구조
-            parent = new int[N];
-            makeSet();
-            
-            // 간선....
-            int size = N*(N-1)/2; // N개의 정점을 연결하는 모든 간선의 수 
-            edges = new long[size][3];
-            
-            int idx = 0;
+            vertex = new ArrayList<>();
+            for (int i = 0; i < N; i++) {
+                vertex.add(new ArrayList<Edge>());                
+            }
+
             for (int v1 = 0; v1 < N - 1; v1++) {
-                for (int v2 = v1 + 1; v2 < N; v2++) {
-                    edges[idx][0] = v1;
-                    edges[idx][1] = v2;
-                    edges[idx][2] = distance(island[v1][0], island[v2][0], island[v1][1], island[v2][1]);
-                    idx++;
+                for (int v2 = v1 + 1; v2 < N; v2++) {                    
+                    Edge edge1 = new Edge(v2, distance(island[v1][0], island[v2][0], island[v1][1], island[v2][1]));
+                    Edge edge2 = new Edge(v1, distance(island[v1][0], island[v2][0], island[v1][1], island[v2][1]));
+                    vertex.get(v1).add(edge1);
+                    vertex.get(v2).add(edge2);
                 }
             }
             
-            // 쿠르스칼 풀이
-            // 정렬
-            Arrays.sort(edges, (o1, o2) -> Long.compare(o1[2], o2[2]));
+            // 프림 풀이
+            visit = new boolean[N];
+            pqueue.clear();
             
             ans = 0;
-            int cnt = 0;
-            
-            for (int i = 0; i < size; i++) {
-                // union() 호출 대신 직접 코드를 작성 - call stack save!
-                int px = findSet((int) edges[i][0]);
-                int py = findSet((int) edges[i][1]);
-
-                if( py == px ) continue;
-//                parent[py] = px;
-                if( px > py ) parent[py] = px;
-                else parent[px] = py;
+            int cnt = 1;
+            visit[0] = true;
+            pqueue.addAll(vertex.get(0));
+            while(! pqueue.isEmpty() ) {
                 
-                ans += edges[i][2]; // 누적 비용
+                Edge edge = pqueue.poll();
+                if( visit[edge.v] ) continue;
+                
+                visit[edge.v] = true;
+                ans += edge.c;
                 cnt++;
-                if( cnt == N - 1) break;
+                
+                if( cnt == N ) break;
+                for (Edge e : vertex.get(edge.v)) {
+                    if( visit[e.v] ) continue;
+                    pqueue.offer(e);
+                }                
             }
-            
+
             sb.append("#").append(t).append(" ").append(Math.round(ans*E)).append("\n");
         }
         System.out.println(sb);
@@ -87,15 +88,14 @@ public class Solution {
     static long distance(int x1, int x2, int y1, int y2) {
         return (long)(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
     }
-    
-    static void makeSet() {
-        for (int i = 0; i < N; i++) {
-            parent[i] = i;
+    // 어떤 정점으로부터 선택해서 다른 정점으로 이동할 수 있는 간선 정보, v : 선택하면 가게되년 정점
+    static class Edge{
+        int v;
+        long c;
+        
+        Edge(int v, long c){
+            this.v = v;
+            this.c = c;
         }
-    }
-    
-    static int findSet(int x) {
-        if( parent[x] == x ) return x;
-        else return parent[x] = findSet(parent[x]);
     }
 }
