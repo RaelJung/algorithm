@@ -2,159 +2,107 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-//타자의 조합을 순열로 (완탐)
-//1번 선수는 4번 타자로 고정
+//8! 계산해서 시간 복잡도 개선한 코드
 public class Main {
 	static int N, ans;
-	static int player[][];			//선수 목록
-	static boolean select[];		//타자 선택 여부(for 순열)
-	static int order[];				//타순 결정
-	
-	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		N = Integer.parseInt(br.readLine());
-		
-		player = new int[N+1][10];		//0,0은 더미
-		select = new boolean[10];		//0은 더미
-		order = new int[10];			//0은 더미
-		
-		//1번 선수는 4번 타자로 고정
-		select[4] = true;
-		order[4] = 1;
-		
-		
-		//선수 배열 입력
-		for(int i=1; i<=N; i++) {
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			for(int j=1; j<=9; j++) {
-				player[i][j] = Integer.parseInt(st.nextToken());
-			}
-		}
-		
-		ans=0;
-		perm(2);	//2번 타자부터 시작
-		
-		System.out.println(ans+"\n");
-	}
-	
-	//순열
-	public static void perm(int idx) {
-		//기저조건 (9명을 넘어가면)
-		if(idx > 9) {
-			//complete code
-			play();
-			return;
-		}
-		
-		//2번 주자부터 선택
-		for(int i=1; i<=9; i++) {
-			//선택된 애면 pass
-			if(select[i]) continue;
-			
-			//풀이
-			select[i] = true;
-			order[i] = idx;
-			perm(idx+1);
-			select[i] = false;
-		}
-	}
-	
-	//야구 경기
-	public static void play() {
-		int score = 0;
-		int start = 1;		//이닝에서 처음 시작하는 타자(다음 이닝에 이어져야 하므로)
-		boolean[] base;		//홈, 1루, 2루, 3루
-		
-		for(int i=1; i<=N; i++) {
-			int outCnt=0;		//아웃된 수 (3번 아웃은 3진 아웃)
-			base = new boolean[4];		//베이스 초기화
-			
-			outer: while(true) {
-				for(int j=start; j<=9; j++) {
-					int hitter = player[i][order[j]];		//j번째 타자
-					
-					switch(hitter) {
-					//out
-					case 0:
-						outCnt++;
-						break;
-					//안타
-					case 1:
-						for(int k=3; k>=1; k--) {
-							//베이스 현황 보기
-							if(base[k]) {
-								//3루면 홈으로
-								if(k==3) {
-									score++;
-									base[k] = false;
-									continue;
-								}
-								
-								//1,2면 1루씩 옮긴다. (원래 자리 비워주기!)
-								base[k] = false;
-								base[k+1] = true;
-							}
-						}
-						//홈에서 1루로!
-						base[1] = true;	
-						break;
-					//2루
-					case 2:
-						for(int k=3; k>=1; k--) {
-							//베이스 현황 보기
-							if(base[k]) {
-								//3루, 2루면 홈으로
-								if(k==3 || k==2) {
-									score++;
-									base[k] = false;
-									continue;
-								}
-								
-								//1루면 3루로 (원래 자리 비워주기!)
-								base[k] = false;
-								base[k+2] = true;
-							}
-						}
-						//홈에서 2루로!
-						base[2] = true;	
-						break;
-					//3루
-					case 3:
-						for(int k=3; k>=1; k--) {
-							//베이스 현황 보기
-							if(base[k]) {
-								score++;
-								base[k] = false;
-							}
-						}
-						//홈에서 3루로!
-						base[3] = true;	
-						break;
-					//홈런
-					case 4:
-						score++;
-						for(int k=3; k>=1; k--) {
-							//베이스 현황 보기
-							if(base[k]) {
-								score++;
-								base[k] = false;
-							}
-						}
-						break;
-					}
-					
-					//아웃 카운트가 3개일 경우
-					if(outCnt == 3) {
-						start = j+1;	//다음 타자 세팅
-						if(start == 10) start = 1;
-						break outer;
-					}
-				}
-				//타자를 1로 초기화
-				//전부 안타를 쳐서 아웃되지 않으면 무한루프 이므로 다시 9까지 갔으면 다시 세팅
-				start = 1;
-			}
-		}
-		ans = Math.max(ans, score);
-	}
+    static int[][] inning;
+    static int[] src = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+    static int[] tgt = new int[9];
+//    static boolean[] select = new boolean[9];
+     
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        
+        // 자료구조 초기화
+        inning = new int[N][9];
+        for (int i = 0; i < N; i++) {
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < 9; j++) {
+                inning[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+        
+        //1번 선수는 무조건 4번째 타자
+        tgt[3] = src[0];
+        
+        // 풀이
+        perm(1, 1<<3); // index, mask(4번째는 차있다는 뜻)
+        
+        System.out.println(ans);
+    }
+
+    static void perm(int srcIdx, int mask) {
+        // 기저조건
+        if( srcIdx == 9 ) {
+            // complete code
+            game();
+            return;
+        }
+        
+        // 모든 0 - 8 에 대해서 이전에 사용하지 않은 것 제외하고 고려
+        for (int i = 0; i < 9; i++) { // src[0] 는 tgt[3](4번자리) 에 고정
+            
+            if( (mask & 1 << i) != 0 ) continue;
+            
+            tgt[i] = src[srcIdx];
+            perm(srcIdx + 1, mask | 1 << i);
+        }
+    }
+    
+    static void game() {
+        // 게임 초기화
+        int score = 0;  // 점수
+        int player = 0; // 선수 순번 (index)
+        
+        // 이닝 반복 (N만큼)
+        for (int i = 0; i < N; i++) {
+            
+            int base = 0; // 주자 - bitmask   0000 (주자 X) 0001 (1루에만 주자) 1101(1점 + 1,3루) 111111
+            int out = 0;
+            // 매 이닝별로 타자를 순서대로 세워서 안타, 아웃을 주어진 입력대로 계산
+            // 이전 마지막으로 아웃된 다음 타자 순번부터 시작 ( player 가 계속 갱신 )
+            for (int j = player; j < 9; j++) {
+                
+                int num = inning[i][ tgt[j]  ]; // i 번째 이닝에서 j 번째 선수 <= tgt[j]
+                
+                if( num == 0 ) { // 아웃
+                    out++;
+                    if( out == 3 ) {
+                        player = j + 1; // 아웃된 마지막타자 다음 타자로 변경
+                        if( player == 9 ) player = 0;
+                        break; // 현재 for 종료 => 다음 이닝  (바깥 for 다음 진행 )
+                    }
+                }else { // 안타, 홈런
+                    // 0011 -> 0110
+                    // 기존 base 를 왼쪽으로 num 만큼 밀고 오른쪽에 num 주루 표시
+                    base = base << num;
+                    base = base | 1 << num - 1; //
+                    
+                    // 점수 계산
+                    score += score(base);
+                    
+                    // 3루까지를 제외한 점수에 해당하는 주로 표시 초기화
+                    base = base & ( ~(1 << 3) );
+                    base = base & ( ~(1 << 4) );
+                    base = base & ( ~(1 << 5) );
+                    base = base & ( ~(1 << 6) );
+                }
+                
+                if( j == 8 ) j = -1; // 맨 앞으로 보정되도록
+            }
+        }
+            
+        ans = Math.max(ans, score);
+        
+    }
+    
+    static int score(int base) {
+        int sum = 0;
+        sum += ( base & 1 << 3 ) != 0 ? 1 : 0; // 0001    => 0001000
+        sum += ( base & 1 << 4 ) != 0 ? 1 : 0; // 00001   => 0010000
+        sum += ( base & 1 << 5 ) != 0 ? 1 : 0; // 0001    => 0100000
+        sum += ( base & 1 << 6 ) != 0 ? 1 : 0; // 0001    => 1000000
+        return sum;
+    }
 }
