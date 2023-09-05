@@ -1,18 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayDeque;
 import java.util.Arrays;
-import java.util.Queue;
 import java.util.StringTokenizer;
 
-//부분집합을 통해서 A, B 두 개의 그룹으로 나누고 각각 연결여부 bfs, dfs로 확인 후  - 최소값 갱신
 public class Main {
 	static int N, min;
 	static int[][] matrix;
-	static boolean[] select;		//부분 집합 용도
-	static boolean[] visit;			//bfs, dfs 중복 check
-	
-	static Queue<Integer> q = new ArrayDeque<>();
+	static boolean[] select;
+	static boolean[] visit;
 	
 	public static void main(String[] args) throws Exception{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -59,20 +54,13 @@ public class Main {
 	}
 	
 	static void check() {
-		//두 그룹이 각각 유효한지 따진다. (연결)
-		//그룹별로 따지되, 양쪽 다 연결 여부를 확인
-		//bfs로 각각 갈 수 있는 곳으로 가서 visit -> true
-		//두 그룹을 모두 따지고 나면 visit 전체 true? 일부가 false가 되어있는지?
-		
+        //방문 배열 초기화
 		Arrays.fill(visit, false);
-		q.clear();
 		
-		// A - select: true
-		int a = -1;		//A 그룹의 dfs 시작 정점
+		// A 그룹 - 선택 그룹
+		int a = -1;
 		for(int i=1; i<=N; i++) {
-			//선택된 한 정점만 queue에 넣고 bfs
 			if(select[i]) {
-				//선택한 정점에서 dfs
 				a = i;
 				break;
 			}
@@ -83,10 +71,9 @@ public class Main {
 		
 		dfs(a, true);
 		
-		// B - select: false
+		//B 그룹 - 비선택 그룹
 		int b = -1;
 		for(int i=1; i<=N; i++) {
-			//선택된 한 정점만 queue에 넣고 bfs
 			if(! select[i]) {
 				b = i;
 				break;
@@ -100,7 +87,7 @@ public class Main {
 		
 		// A, B 모두 연결되어 있는지 visit[] 확인
 		for(int i=1; i<=N; i++) {
-			if(!visit[i]) return;		//연결되어 있지 X 것이 하나라도 있으면
+			if(!visit[i]) return;
 		}
 		
 		//두 그룹을 나누었고, 모두 연결된 상태
@@ -118,10 +105,7 @@ public class Main {
 	
 	static void subset (int srcIdx) {
 		if(srcIdx == N+1) {
-			//complete code
-			//2개 구역으로 나뉜 상태
 			check();
-			
 			return;
 		}
 		select[srcIdx] = true;	//선택
