@@ -1,94 +1,71 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-//Edge: 연결된 노드들과 가중치 표시
-class Edge implements Comparable<Edge> {
-	int start;
-	int end;
-	int weight;
-
-	Edge(int start, int end, int weight) {
-		this.start = start;
-		this.end = end;
-		this.weight = weight;
-	}
-
-    //가중치를 판단
-	@Override
-	public int compareTo(Edge o) {
-		return weight - o.weight;
-	}
-
-}
-
 public class Main {
-	static int[] parent;                //union-find용 변수
-	static ArrayList<Edge> edgeList;    //간선 노드
+    static int N, M;
+    static PriorityQueue<Edge> pq;
+    static int parent[];    //서로소
 
-	public static void main(String[] args) throws NumberFormatException, IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st;
+    static class Edge{
+        int v1, v2, c;
 
-		int N = Integer.parseInt(br.readLine());
-		int M = Integer.parseInt(br.readLine());
+        public Edge(int v1, int v2, int c){
+            this.v1 = v1;
+            this.v2 = v2;
+            this.c = c;
+        }
+    }
 
-		edgeList = new ArrayList<>();
-        //1. 노드 초기화
-		for (int i = 0; i < M; i++) {
-			st = new StringTokenizer(br.readLine());
-			int start = Integer.parseInt(st.nextToken());
-			int end = Integer.parseInt(st.nextToken());
-			int weight = Integer.parseInt(st.nextToken());
-            
-			edgeList.add(new Edge(start, end, weight));
-		}
+    static void makeSet(){
+        for(int i=1; i<=N; i++){
+            parent[i] = i;
+        }
+    }
+    static int find(int x){
+        if(x == parent[x]) return x;
+        else return parent[x] = find(parent[x]);
+    }
+    static boolean union(int x, int y){
+        int px = find(x);
+        int py = find(y);
 
-        //2. union-find 초기화
-		parent = new int[N + 1];
-		for (int i = 1; i <= N; i++) {
-			parent[i] = i;
-		}
+        if(px == py) return false;
+        if(px < py) parent[py] = px;
+        else parent[px] = py;
+        return true;
+    }
 
-        //3. 크루스칼
-        //3-1. 모든 간선을 거리 기준으로 정렬
-		Collections.sort(edgeList);
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        N = Integer.parseInt(br.readLine());
+        M = Integer.parseInt(br.readLine());
 
-		int ans = 0;
-		for (int i = 0; i < edgeList.size(); i++) {
-			Edge edge = edgeList.get(i);
+        pq = new PriorityQueue<>((e1, e2) -> e1.c - e2.c);
 
-			//3-2. Union-Find (사이클이 발생하는 간선은 제외.)
-			if (find(edge.start) != find(edge.end)) {
-				ans += edge.weight;
-				union(edge.start, edge.end);
-			}
-		}
+        for(int i=0; i<M; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine());
+            int v1 = Integer.parseInt(st.nextToken());
+            int v2 = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
 
-        //4. 출력
-        System.out.println(ans);
-		br.close();
-	}
+            pq.add(new Edge(v1, v2, c));
+        }
 
-    //x가 어떤 집합에 포함되어 있는지 찾는 연산
-	public static int find(int x) {
-		if (x == parent[x]) {
-			return x;
-		}
+        //서로소 초기화
+        parent = new int[N+1];
+        makeSet();
 
-		return parent[x] = find(parent[x]);
-	}
+        //최소 찾기
+        int cnt = 0;
+        while(!pq.isEmpty()){
+            Edge e = pq.poll();
+            if(union(e.v1, e.v2)) cnt += e.c;
+        }
 
-    //x와 y가 포함되어 있는 집합을 합치는 연산
-	public static void union(int x, int y) {
-		x = find(x);
-		y = find(y);
-
-		if (x != y) {
-			parent[y] = x;
-		}
-	}
+        System.out.println(cnt);
+    
+    }
 }
