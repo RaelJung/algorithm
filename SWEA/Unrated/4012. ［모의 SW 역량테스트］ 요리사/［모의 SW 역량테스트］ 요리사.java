@@ -1,87 +1,70 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
-//BitMask
 public class Solution {
-	static int N, halfN, T, min;
-	static int[][] map;
-	static int arrA[], arrB[];		
+	static int T, N, min;
+	static int map[][];
+	// 출력
 	static StringBuilder sb = new StringBuilder();
-	
-	public static void main(String[] args) throws Exception{
+
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		T = Integer.parseInt(br.readLine());
-		
-		for(int t=1; t<=T; t++) {
+
+		for (int t = 1; t <= T; t++) {
 			N = Integer.parseInt(br.readLine());
-			halfN = N/2;
+			min = Integer.MAX_VALUE;
+
 			map = new int[N][N];
-			arrA = new int[halfN];
-			arrB = new int[halfN];
-			
-			//입력
-			for(int i=0; i<N; i++) {
+			for (int i = 0; i < N; i++) {
 				StringTokenizer st = new StringTokenizer(br.readLine());
-				for(int j=0; j<N; j++) {
+				for (int j = 0; j < N; j++) {
 					map[i][j] = Integer.parseInt(st.nextToken());
 				}
 			}
-			
-			//풀이
-			min = Integer.MAX_VALUE;
-			comb(0, 0, 0);
-			
-			sb.append("#"+t+" "+min+"\n");
+
+			comb(0, 0, 0); // srcIdx, tgtIdx, mask
+
+			sb.append("#").append(t).append(" ").append(min).append("\n");
 		}
-		
 		System.out.println(sb);
 	}
-	
+
 	static void comb(int srcIdx, int tgtIdx, int mask) {
-		//기저조건
-		if(tgtIdx == halfN) {
-			//complete code
-			check(mask);
-			
+		// 기저조건
+		if (tgtIdx == N / 2) {
+			int selA[] = new int[N / 2];
+			int selB[] = new int[N / 2];
+
+			// 각 재료 구분
+			int idxA = 0, idxB = 0;
+			for (int i = 0; i < N; i++) {
+				// 선택된 재료
+				if ((mask & 1 << i) != 0) {
+					selA[idxA++] = i;
+				} // 아닌 재료
+				else {
+					selB[idxB++] = i;
+				}
+			}
+
+			// 시너지 구하기
+			int sumA = 0, sumB = 0;
+			for (int i = 0; i < N / 2; i++) {
+				for (int j = 0; j < N / 2; j++) {
+					sumA += map[selA[i]][selA[j]];
+					sumB += map[selB[i]][selB[j]];
+				}
+			}
+			// 최소 구하기
+			min = Math.min(min, Math.abs(sumA - sumB));
 			return;
 		}
-		
+		//기저조건 2
 		if(srcIdx == N) return;
 		
-		comb(srcIdx + 1 , tgtIdx + 1, mask | 1 << srcIdx);		//현재 src를 tgt에 선택
-		comb(srcIdx+1, tgtIdx, mask);
-		
+		comb(srcIdx + 1, tgtIdx + 1, mask | 1 << srcIdx); // 선택
+		comb(srcIdx + 1, tgtIdx, mask); // 비선택
 	}
-	
-	//select 배열에서 선택, 비선택 => 2그룹 나누어서 생각
-	//각각의 그룹별  sum 계산 후, 차이 계산 후, min 계산
-	static void check(int mask) {
-		int sumA = 0;	//선택
-		int sumB = 0;	//비선택
-		
-		int idxA = 0;	//arrA idx
-		int idxB = 0;	//arrB idx
-		
-		//select[] -> arrA, arrB
-		for(int i=0; i<N; i++) {
-			if((mask & 1 << i) != 0) arrA[idxA++] = i;
-			else arrB[idxB++] = i;
-		}
-		
-		//2개로 나뉜 각 재료 배열에서 서로 모두 만나게 for-for
-		for(int i=0; i<halfN; i++) {
-			for(int j=0; j<halfN; j++)
-			{		
-				if(i==j) continue;
-				sumA += map[arrA[i]][arrA[j]];
-				sumB += map[arrB[i]][arrB[j]];
-				
-			}
-		}
-		
-		min = Math.min(min, Math.abs(sumA - sumB));
-	}
-	
 }
