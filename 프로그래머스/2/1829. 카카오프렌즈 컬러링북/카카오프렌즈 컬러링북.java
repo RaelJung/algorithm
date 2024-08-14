@@ -1,12 +1,12 @@
 class Solution {
-    private boolean[][] visited;
-    private int[] dx = {-1, 1, 0, 0}; // 상하좌우 방향 벡터
-    private int[] dy = {0, 0, -1, 1};
-    private int m, n;
+    boolean[][] visited;
+    int[] dx = {-1, 1, 0, 0}; // 상하좌우 방향 벡터
+    int[] dy = {0, 0, -1, 1};
+    int M, N;
 
     public int[] solution(int m, int n, int[][] picture) {
-        this.m = m;
-        this.n = n;
+        M = m;
+        N = n;
         visited = new boolean[m][n];
 
         int numberOfArea = 0;
@@ -36,7 +36,7 @@ class Solution {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
-            if (nx >= 0 && nx < m && ny >= 0 && ny < n) {
+            if (nx >= 0 && nx < M && ny >= 0 && ny < N) {
                 if (!visited[nx][ny] && picture[nx][ny] == color) {
                     areaSize += dfs(nx, ny, picture, color);
                 }
