@@ -1,39 +1,45 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
-public class Solution {
+class Solution {
     public int solution(int[] priorities, int location) {
-        Queue<int[]> q = new LinkedList<>();
+        int answer = 0;
         
-        for (int i = 0; i < priorities.length; i++) {
-            q.offer(new int[]{priorities[i], i});
+        Queue<Process> q = new LinkedList<>();
+        
+        for(int i=0; i<priorities.length; i++){
+            q.add(new Process(priorities[i], i));
         }
         
-        int order = 0; // 실행 순서
-        while (!q.isEmpty()) {
-            int[] curr = q.poll();
-            boolean isHigh = false;
+        while(!q.isEmpty()){
+            Process curr = q.poll();
+            boolean hasBig = false;
             
-            // 큐의 다른 프로세스들 중 현재 프로세스보다 우선순위가 높은 것이 있는지 확인
-            for (int[] process : q) {
-                if (process[0] > curr[0]) {
-                    isHigh = true;
+            // 현재 우선순위와, 큐에 남아있는 우선순위와 비교
+            // 현재 큐를 리스트로 변환하여 우선순위를 비교
+            for (Process p : q) {
+                if (curr.priority < p.priority) {
+                    hasBig = true;
                     break;
                 }
             }
             
-            if (isHigh) {
-                // 우선순위가 더 높은 프로세스가 있으면 현재 프로세스를 큐의 뒤로 보냄
-                q.offer(curr);
-            } else {
-                // 우선순위가 높은 프로세스가 없으면 현재 프로세스를 실행
-                order++;
-                if (curr[1] == location) {
-                    return order;
-                }
+            if(hasBig) q.add(curr);
+            else{
+                answer++;
+                if(curr.idx == location) break;
             }
         }
         
-        return -1;
+        return answer;
+    }
+    
+    public static class Process {
+        int idx;
+        int priority;
+        
+        public Process(int priority, int idx){
+            this.idx = idx;
+            this.priority = priority;
+        }
     }
 }
