@@ -1,72 +1,89 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Queue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-// 인접 리스트
 public class Main {
-	static int N, M, V;
-    static int from, to;
-    static boolean[] visited;
-    static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+    static int N, M, V;
+    static int s1, s2;
+    static boolean visit[];
+    static LinkedList<LinkedList<Integer>> graph;
+    static StringBuilder sb;
 
-    public static void main(String[] ars) throws Exception {
+    public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
+        sb = new StringBuilder();
+
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
         V = Integer.parseInt(st.nextToken());
-        visited = new boolean[N + 1];
-        for (int i = 0; i < N + 1; i++) {
-            graph.add(new ArrayList<>());
-        }
-        for (int i = 0; i < M; i++) {
-            st = new StringTokenizer(br.readLine());
-            from = Integer.parseInt(st.nextToken());
-            to = Integer.parseInt(st.nextToken());
-            graph.get(from).add(to);
-            graph.get(to).add(from);
 
+        visit = new boolean[N+1];
+        graph = new LinkedList<>();
+        //노드 인덱스 맞추기 위해서+1
+        for(int i=0; i<N+1; i++){
+            graph.add(new LinkedList<>());
         }
-        for (int i = 1; i <= N; i++) {
+
+        //간선 연결
+        for(int i=0; i<M; i++){
+            st = new StringTokenizer(br.readLine());
+            s1 = Integer.parseInt(st.nextToken());
+            s2 = Integer.parseInt(st.nextToken());
+
+            graph.get(s1).add(s2);
+            graph.get(s2).add(s1);
+        }
+
+        //번호가 작은 정점을 먼저 방문(sort 필요)
+        for(int i=1; i<N+1; i++){
             Collections.sort(graph.get(i));
         }
 
-        DFS(V);
-        visited = new boolean[N + 1];
-        System.out.println();
-        BFS(V);
+        //dfs
+        //시작점 visit 처리!!!!!!!!!
+        visit[V] = true;
+        sb.append(V+" ");
+        dfs(V);
+        visit = new boolean[N+1];   //초기화
+        sb.append("\n");
+        //bfs
+        bfs(V);
 
+        System.out.println(sb.toString());
     }
 
-    static void DFS(int idx) {
-        System.out.print(idx+ " ");
-        visited[idx] = true;
-        ArrayList<Integer> adjList = graph.get(idx);
-        for(int i =0; i<adjList.size(); i++) {
-            if(visited[adjList.get(i)]) continue;
-            DFS(adjList.get(i));
-        }
+    public static void dfs(int s){
+        //종료조건
+        //갈 곳 없을 때; - 무조건 돌아봐야 아니깐 끝에서 판단
         
-    }
-    static void BFS(int idx) {
-        Queue<Integer> queue = new ArrayDeque<>();
-        queue.offer(idx);
-        visited[idx] = true;
-        while (!queue.isEmpty()) {
-            int cur = queue.poll();
-            System.out.print(cur + " ");
-            ArrayList<Integer> adjList = graph.get(cur);
-            for (int i = 0; i < adjList.size(); i++) {
-                if (visited[adjList.get(i)])
-                    continue;
-                queue.offer(adjList.get(i));
-                visited[adjList.get(i)] = true;
+        for(int node : graph.get(s)){
+            if(visit[node]) continue;
+
+            sb.append(node+" ");
+            visit[node] = true;
+            dfs(node);
+        }
+        return;
+    };
+
+    public static void bfs(int s){
+        Queue<Integer> q = new LinkedList<>();
+        q.add(s);
+        sb.append(s+" ");
+        visit[s] = true;
+
+        while(!q.isEmpty()){
+            int c = q.poll();
+
+            //c 노드의 요소를 오름차순으로 불러옴
+            for(int node : graph.get(c)){
+                if(visit[node]) continue;
+                visit[node] = true;
+                q.add(node);
+                sb.append(node+" ");
             }
         }
+        sb.append("\n");
+        return;
     }
-
 }
