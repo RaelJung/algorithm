@@ -1,35 +1,50 @@
+import java.io.*;
 import java.util.*;
 
 public class Main {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt();
-        int[][] meetings = new int[N][2];
+    static int N;
+    static Time time[];
 
-        for (int i = 0; i < N; i++) {
-            meetings[i][0] = sc.nextInt(); // 시작 시간
-            meetings[i][1] = sc.nextInt(); // 종료 시간
+    public static void main(String[] args) throws Exception{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        time = new Time[N];
+
+        StringTokenizer st;
+        for(int i=0; i<N; i++){
+            st = new StringTokenizer(br.readLine());
+            
+            time[i] = new Time(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
         }
 
-        // 종료 시간 기준 정렬, 같으면 시작 시간 기준 정렬
-        Arrays.sort(meetings, (a, b) -> {
-            if (a[1] == b[1]) {
-                return a[0] - b[0]; // 시작 시간 오름차순
-            } else {
-                return a[1] - b[1]; // 종료 시간 오름차순
-            }
-        });
+        Arrays.sort(time);
 
-        int count = 0;
-        int end = 0;
-
-        for (int i = 0; i < N; i++) {
-            if (meetings[i][0] >= end) {
-                end = meetings[i][1];
-                count++;
+        int cnt = 0;
+        int end = 0;    //이전 회의 끝 시간
+        for(int i=0; i<N; i++){
+            if(time[i].s >= end){
+                end = time[i].e;
+                cnt++;
             }
         }
 
-        System.out.println(count);
+        System.out.println(cnt);
+    }
+
+    public static class Time implements Comparable<Time>{
+        int s,e;
+
+        public Time(int s, int e){
+            this.s = s;
+            this.e = e;
+        }
+
+        @Override
+        public int compareTo(Time o){
+            if (this.e == o.e) {
+                return this.s - o.s; // 끝나는 시간이 같으면 시작 시간 기준으로 정렬
+            }
+            return this.e-o.e;
+        }
     }
 }
