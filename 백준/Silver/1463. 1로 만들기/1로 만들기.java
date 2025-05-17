@@ -1,27 +1,34 @@
-import java.util.Scanner;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    static int X;
-    static int[] dp;
     public static void main(String[] args) throws Exception{
-        Scanner sc = new Scanner(System.in);
-        X = sc.nextInt();
-        dp = new int[X+1];  //인덱스가 숫자가 될 것임!
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
 
-        // 3으로 나누거나, 2로 나누어서(나머지 없어야 함)
-        // -1 하는 것을 반복하여 최종적으로 1로 만드는 것
-        // 최소 연산을 구하므로 DP 문제임... 
+        //X가 3으로 나누어 떨어지면 3으로 나누기
+        //X가 2로 나누어 떨어지면 2로 나누기
+        //1을 빼기
+        //세 개를 적절히 사용해 1을 만들어야 함
+        //연산의 최솟값 구하기
 
-        for(int i=2; i<X+1; i++){
-            dp[i] = dp[i-1]+1;  //1을 뺀 경우
-            if(i%3 == 0){
-                dp[i] = Math.min(dp[i], dp[i/3]+1); //3을 나누는 경우
+        //위의 규칙이 이전 계산을 포함함 -> dp
+        int dp[] = new int[n+1];
+        //초기값 설정
+        dp[1] = 0;      //이미 1이다
+        
+        //2부터 시작
+        for(int i=2; i<=n; i++){
+            dp[i] = dp[i-1]+1;
+            if(i%3==0){
+                //i-1 인덱스에 1빼기 vs i/3 인덱스에 3나누기 연산 하나 더하기
+                dp[i] = Math.min(dp[i], dp[i/3]+1);
             }
-            if(i%2 == 0){
-                dp[i] = Math.min(dp[i], dp[i/2]+1); //2를 나누는 경우
+            if(i%2==0){
+                dp[i] = Math.min(dp[i], dp[i/2]+1);
             }
         }
 
-        System.out.println(dp[X]);
+        System.out.println(dp[n]);
     }
 }
